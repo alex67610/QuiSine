@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "537144133463",
+    "firebase_url": "https://quisine-c8d9c.firebaseio.com",
+    "project_id": "quisine-c8d9c",
+    "storage_bucket": "quisine-c8d9c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537144133463:android:fb6be368a5f3793c",
+        "android_client_info": {
+          "package_name": "com.example.alex.quisine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537144133463-t92ea6nc4h03719t7f6vrmkp6t46rnan.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alex.quisine",
+            "certificate_hash": "e8ee92ed569fdfa7325f986acde81c17d29cc6d9"
+          }
+        },
+        {
+          "client_id": "537144133463-mvpkrmh05q33685ike3nhauq0a1a3l0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6f9YIR_aj7MrdfdFuMLlCpQKHIz9TuPs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537144133463-mvpkrmh05q33685ike3nhauq0a1a3l0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
