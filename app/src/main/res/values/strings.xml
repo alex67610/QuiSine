@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">QuiSine</string>
+    <string name="Settings">Settings</string>
+    <string name="Match">Match</string>
+    <string name="Discussion">Discussion</string>
+    <string name="Home">Home</string>
+
 </resources>
