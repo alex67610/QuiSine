@@ -9,32 +9,74 @@ import android.graphics.Color;
 import android.media.Image;
 import android.media.audiofx.BassBoost;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static android.R.attr.name;
+import static android.R.attr.progress;
 
 
 public class MainActivity extends Activity {
 
     private ArrayList<String> selectedIngredients = new ArrayList<>();
-
+    private SeekBar mSeekbar;
+    private TextView SeekBarValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final String uid = user.getUid();
+
+
+        mSeekbar = (SeekBar) findViewById(R.id.seekbar);
+        SeekBarValue = (TextView) findViewById(R.id.textViewSeekBar);
+
+        mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                SeekBarValue.setText(String.valueOf(progress)+" mi.");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                String uid = user.getUid();
+                DatabaseReference myRef = database.getReference("User");
+                myRef.child(uid).child("User Preferences").child("Distance").setValue(String.valueOf(progress));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(MainActivity.this, "Distance saved",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         createBottomBar();
         createSearchBar();
@@ -54,11 +96,17 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedCity = (String) adapterView.getItemAtPosition(i);
-
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                String uid = user.getUid();
+                DatabaseReference myRef = database.getReference("User");
+                myRef.child(uid).child("User Preferences").child("Area").setValue(selectedCity);
+                Toast.makeText(MainActivity.this, "Location saved",
+                        Toast.LENGTH_SHORT).show();
             }
         });
         textView2.setAdapter(adapter2);
-        }
+    }
 
     private void createSearchBar() {
         final String[] INGREDIENTS = new String[]{
@@ -107,18 +155,11 @@ public class MainActivity extends Activity {
                 String selectedIngredient = (String) adapterView.getItemAtPosition(i);
                 if (!selectedIngredients.contains(selectedIngredient)) {
                     //addIngredient(selectedIngredient);
-
-
-
-
-
-
-
-
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-                    DatabaseReference myRef = database.getReference(selectedIngredient);
-                    myRef.setValue(1);
+                    String uid = user.getUid();
+                    DatabaseReference myRef = database.getReference("User");
+                    myRef.child(uid).child("User Ingredients").child(selectedIngredient).setValue(selectedIngredient);
                     Toast.makeText(MainActivity.this, "Item added",
                             Toast.LENGTH_SHORT).show();
                     textView.setText(null);
@@ -134,10 +175,7 @@ public class MainActivity extends Activity {
 
     private void addIngredient(String newIngredient) {
         //selectedIngredients.add(newIngredient);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(newIngredient);
 
-        myRef.setValue(1);
     }
 
     private void createBottomBar() {

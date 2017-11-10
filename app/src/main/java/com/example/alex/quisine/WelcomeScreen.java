@@ -31,7 +31,6 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
     private EditText editTextPassword;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,11 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
                             Toast.makeText(WelcomeScreen.this, "Account created",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            mDatabase.child("users").setValue(user);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            String email = user.getEmail();
+                            String uid = user.getUid();
+                            DatabaseReference myRef = database.getReference("User");
+                            myRef.child(uid).child("User Info").child("Email").setValue(email);
                         } else {
                             Toast.makeText(WelcomeScreen.this, "Account creation failed",
                                     Toast.LENGTH_SHORT).show();
@@ -118,8 +121,8 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
             createAccount(editTextUsername.getText().toString(),editTextPassword.getText().toString());
         } else if (view.getId()==R.id.buttonLogin) {
             signIn(editTextUsername.getText().toString(),editTextPassword.getText().toString());
-            Intent intentLogin = new Intent(WelcomeScreen.this, MainActivity.class);
-            startActivity(intentLogin);
+            //Intent intentLogin = new Intent(WelcomeScreen.this, MainActivity.class);
+            //startActivity(intentLogin);
         }
     }
 }
