@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,23 +36,26 @@ import static android.R.attr.name;
 import static android.R.attr.progress;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Button.OnClickListener {
 
     private ArrayList<String> selectedIngredients = new ArrayList<>();
     private SeekBar mSeekbar;
     private TextView SeekBarValue;
+    private Button buttonCheckIngredients;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final String uid = user.getUid();
 
 
         mSeekbar = (SeekBar) findViewById(R.id.seekbar);
         SeekBarValue = (TextView) findViewById(R.id.textViewSeekBar);
+        buttonCheckIngredients = (Button) findViewById(R.id.buttonCheckIngredients);
+
+        buttonCheckIngredients.setOnClickListener(this);
 
         mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -250,5 +254,13 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == buttonCheckIngredients.getId()) {
+            Intent intentIngredients = new Intent(MainActivity.this, CurrentIngredients.class);
+            startActivity(intentIngredients);
+        }
     }
 }
