@@ -89,6 +89,11 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
                             String uid = user.getUid();
                             DatabaseReference myRef = database.getReference("User");
                             myRef.child(uid).child("User Info").child("Email").setValue(email);
+                            myRef.child(uid).child("User Info").child("First Name").setValue("First Name");
+                            myRef.child(uid).child("User Info").child("Last Name").setValue("Last Name");
+                            myRef.child(uid).child("User Info").child("Age").setValue("Age");
+                            myRef.child(uid).child("User Info").child("Address").setValue("Your address");
+                            myRef.child(uid).child("User Info").child("Biography").setValue("Tell us about yourself");
                         } else {
                             Toast.makeText(WelcomeScreen.this, "Account creation failed",
                                     Toast.LENGTH_SHORT).show();

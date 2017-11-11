@@ -23,8 +23,9 @@
         <activity android:name=".MatchedProfileActivity" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".DiscussionReviewActivity" />
-        <activity android:name=".UserIngredients"></activity>
-        <activity android:name=".CurrentIngredients"></activity>
+        <activity android:name=".UserIngredients" />
+        <activity android:name=".CurrentIngredients" />
+        <activity android:name=".UpdateProfile"></activity>
     </application>
 
 </manifest>
