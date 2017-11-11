@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        tools:context="com.example.alex.quisine.MainActivity">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="370dp"
+            android:layout_height="108dp"
+            android:layout_gravity="center"
+            android:contentDescription=""
+            android:src="@drawable/food"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textViewIngredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:text="Enter ingredients you have:"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                tools:ignore="RtlHardcoded"
+                android:backgroundTint="@color/colorRed"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonCheckIngredients"
+            android:layout_width="300dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:background="@color/colorRed"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Check my ingredients"
+            android:textColor="@color/colorBottomNavigationActiveColored"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp">
+
+            <TextView
+                android:id="@+id/textViewAvailability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="40dp"
+                android:text="Availability:"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="40dp"
+                android:text="Location:"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                tools:ignore="HardcodedText" />
+
+            <AutoCompleteTextView
+                android:id="@+id/search_bar2"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                tools:ignore="RtlHardcoded"
+                android:backgroundTint="@color/colorRed"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="29dp">
+
+            <TextView
+                android:id="@+id/textViewArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:text="Limit my search to this distance:      "
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewSeekBar"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="8.31"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:scrollbarThumbHorizontal="@color/colorRed"
+            android:scrollbarTrackHorizontal="@color/colorRed"
+            android:scrollbarTrackVertical="@color/colorRed">
+
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="80"
+                android:max="15"
+                android:thumbTint="@color/colorRed"
+                android:progressTint="@color/colorRed"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
