@@ -2,6 +2,8 @@ package com.example.alex.quisine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,13 +25,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
+
+import java.sql.Ref;
 
 public class SettingsActivity extends Activity implements Button.OnClickListener{
 
     private TextView textViewFirstName, textViewLastName, textViewAge, textViewAddress, textViewBiography, textViewEmail;
-    private Button buttonUpdateProfile;
+    private Button buttonUpdateProfile, buttonUploadProfile;
+    private ImageView ProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,28 @@ public class SettingsActivity extends Activity implements Button.OnClickListener
         textViewBiography = (TextView) findViewById(R.id.textViewBiography);
         buttonUpdateProfile = (Button) findViewById(R.id.buttonUpdateProfile);
         textViewEmail = (TextView) findViewById(R.id.textViewEmail);
+        buttonUploadProfile = (Button) findViewById(R.id.buttonUploadPicture);
+        ProfilePic = (ImageView) findViewById(R.id.ProfilePic);
 
         buttonUpdateProfile.setOnClickListener(this);
+        buttonUploadProfile.setOnClickListener(this);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://quisine-c8d9c.appspot.com");
+        StorageReference RefPic = storageRef.child(uid);
+
+        final long ONE_MEGABYTE = 1024*1024;
+
+        RefPic.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap= BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                ProfilePic.setImageBitmap(bitmap);
+            }
+        });
 
         FirebaseDatabase db1 = FirebaseDatabase.getInstance();
         DatabaseReference myLookupRef = db1.getReference("User");
@@ -206,6 +232,9 @@ public class SettingsActivity extends Activity implements Button.OnClickListener
         if (view.getId() == R.id.buttonUpdateProfile) {
             Intent intentUpdateProfile = new Intent(SettingsActivity.this, UpdateProfile.class);
             startActivity(intentUpdateProfile);
+        } else if (view.getId() == R.id.buttonUploadPicture) {
+            Intent intentUploadPicture = new Intent(SettingsActivity.this, UploadProfilePicture.class);
+            startActivity(intentUploadPicture);
         }
     }
 }

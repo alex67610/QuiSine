@@ -25,7 +25,8 @@
         <activity android:name=".DiscussionReviewActivity" />
         <activity android:name=".UserIngredients" />
         <activity android:name=".CurrentIngredients" />
-        <activity android:name=".UpdateProfile"></activity>
+        <activity android:name=".UpdateProfile" />
+        <activity android:name=".UploadProfilePicture"></activity>
     </application>
 
 </manifest>

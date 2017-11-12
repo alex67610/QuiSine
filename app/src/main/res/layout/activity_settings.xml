@@ -24,20 +24,19 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:textStyle="bold|italic" />
+            android:textStyle="italic" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="5dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:weightSum="1">
 
             <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="145dp"
-                android:contentDescription=""
+                android:id="@+id/ProfilePic"
+                android:layout_width="match_parent"
+                android:layout_height="219dp"
+                android:layout_gravity="center"
                 android:src="@drawable/ic_account_circle_black_24dp"
                 tools:ignore="ContentDescription" />
 
@@ -45,8 +44,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="0.06"
+            android:layout_height="wrap_content"
             android:weightSum="1">
 
             <TextView
@@ -64,7 +62,7 @@
                 android:layout_width="155dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="28dp"
+                android:layout_marginLeft="1dp"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 
@@ -72,7 +70,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="51dp">
+            android:layout_height="34dp">
 
             <TextView
                 android:id="@+id/textViewAge"
@@ -99,7 +97,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:weightSum="1">
 
             <TextView
@@ -107,31 +105,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="0.05"
                 android:text="Address:"
-                android:textAllCaps="true"
+                android:textAllCaps="false"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/textViewAddress"
-                android:layout_width="175dp"
+                android:layout_width="200dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="45dp"
-                android:layout_weight="0.05"
+                android:layout_weight="0.38"
                 android:textAlignment="center"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="italic" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="74dp"
-            android:weightSum="1"
-            android:layout_weight="0.63">
+            android:layout_weight="0.63"
+            android:weightSum="1">
 
             <TextView
                 android:id="@+id/textViewBiography"
@@ -142,16 +140,35 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonUpdateProfile"
-            android:layout_width="190dp"
-            android:layout_height="28dp"
-            android:layout_gravity="center"
-            android:background="@color/colorRed"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="Update my profile"
-            android:textColor="@color/colorBottomNavigationActiveColored"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/buttonUpdateProfile"
+                android:layout_width="170dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/colorRed"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Update my profile"
+                android:textColor="@color/colorBottomNavigationActiveColored"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonUploadPicture"
+                android:layout_width="170dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="0.36"
+                android:background="@color/colorRed"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Upload profile picture"
+                android:textColor="@color/colorBottomNavigationActiveColored"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
