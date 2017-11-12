@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.alex.quisine.UploadProfilePicture"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/chooseImg"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:background="@color/colorRed"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Choose Image"
+        android:textColor="@color/colorBottomNavigationActiveColored"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/imgView"
+        android:layout_marginTop="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp">
+
+        <Button
+            android:id="@+id/uploadCancel"
+            android:layout_width="130dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:background="@color/colorRed"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Cancel"
+            android:textColor="@color/colorBottomNavigationActiveColored"
+            android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/uploadImg"
+        android:layout_width="130dp"
+        android:layout_height="28dp"
+        android:background="@color/colorRed"
+        android:layout_marginLeft="55dp"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Upload Image"
+        android:textColor="@color/colorBottomNavigationActiveColored"
+        android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
