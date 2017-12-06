@@ -2,23 +2,125 @@ package com.example.alex.quisine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-public class MatchActivity extends Activity{
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.alex.quisine.R.id.uploadCancel;
+
+public class MatchActivity extends Activity {
+
+    private Button buttonNext, buttonCancel;
+    private ImageButton imageButtonLike, imageButtonDislike;
+    private TextView textViewTest;
+    private ImageView imageViewTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
+
+        imageButtonLike = findViewById(R.id.imageButtonLike);
+        imageButtonDislike = findViewById(R.id.imageButtonDislike);
+        textViewTest = findViewById(R.id.textViewTest);
+        imageViewTest = findViewById(R.id.imageViewTest);
+
+        //buttonNext.setOnClickListener(this);
+        //buttonCancel.setOnClickListener(this);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String uid = user.getUid();
+
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = db.getReference().child("User").child(uid).child("Potential Recipes");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final List<String> list = new ArrayList<String>();
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String name = ds.getValue(String.class);
+                    list.add(name);
+                }
+                if (!list.isEmpty()) {
+                    textViewTest.setText(list.get(0));
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReferenceFromUrl("gs://quisine-c8d9c.appspot.com");
+                    StorageReference RefPic = storageRef.child(list.get(0) + ".jpg");
+
+                    final long ONE_MEGABYTE = 1024 * 1024;
+
+                    RefPic.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            imageViewTest.setImageBitmap(bitmap);
+                        }
+                    });
+                }
+
+                imageButtonLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!list.isEmpty()) {
+                            myRef.child("Recipe " + list.get(0)).removeValue();
+                            DatabaseReference myRef2 = db.getReference().child("User").child(uid).child("User Recipes");
+                            myRef2.child("Recipe " + list.get(0)).setValue(list.get(0));
+                        } else {
+                            Toast.makeText(MatchActivity.this, "No other potential recipe",
+                                    Toast.LENGTH_SHORT).show();
+                            imageViewTest.setImageBitmap(null);
+                        }
+                    }
+                });
+
+                imageButtonDislike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!list.isEmpty()) {
+                            myRef.child("Recipe " + list.get(0)).removeValue();
+                        } else {
+                            Toast.makeText(MatchActivity.this, "No other potential recipe",
+                                    Toast.LENGTH_SHORT).show();
+                            imageViewTest.setImageBitmap(null);
+                            textViewTest.setText(null);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         createBottomBar();
     }
@@ -96,4 +198,5 @@ public class MatchActivity extends Activity{
             }
         });
     }
+
 }

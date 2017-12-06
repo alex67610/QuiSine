@@ -114,56 +114,48 @@ public class MainActivity extends Activity implements Button.OnClickListener {
 
     private void createSearchBar() {
         final String[] INGREDIENTS = new String[]{
-                "Tarragon", "Almonds", "Grouper", "Buckwheat", "Soybeans", "Pea Beans"
-                , "Turnips", "Curry Leaves", "Creme Fraiche", "Hoisin Sauce", "Fennel Seeds"
-                , "Watermelons", "Green Onions", "Salt", "Tuna", "Tomato Paste", "Baguette"
-                , "Cornmeal", "Black Beans", "Passion Fruit", "Sweet Chili Sauce", "Capers"
-                , "Plums", "Gelatin", "Spearmint", "Red Snapper", "Tomatoes", "Walnuts"
-                , "Broccoli", "Curry Powder", "Molasses", "Mushrooms", "Apple Pie Spice"
-                , "Unsweetened Chocolate", "Macaroni", "Corned Beef", "Paprika", "Pasta"
-                , "Cider", "Shrimp", "Tabasco Sauce", "Radishes", "Pumpkin Seeds", "Raspberries"
-                , "Flax Seed", "Rosemary", "Catfish", "Swordfish", "Berries", "Corn Syrup"
-                , "Sour Cream", "Maple Syrup", "Coffee", "Adobo", "Lemon Juice", "Lettuce"
-                , "Tartar Sauce", "Eggs", "Baking Soda", "Curry Paste", "Baking Powder"
-                , "Grits", "Pink Beans", "Succotash", "Sweet Peppers", "Quail", "Peanuts"
-                , "Barbecue Sauce", "Romano Cheese", "Ale", "Jelly Beans", "Pineapples"
-                , "Onion Powder", "Cashew Nuts", "Crabs", "Couscous", "Navy Beans"
-                , "Red Chile Powder", "Broth", "Focaccia", "Portabella Mushrooms", "Herring"
-                , "Provolone", "Chicory", "Kumquats", "Squid", "Aquavit", "Olives", "Prawns"
-                , "Mesclun Greens", "Shitakes", "Pesto", "Octopus", "Ham", "Papayas", "Cranberries"
-                , "Squash", "Prunes", "Lemon Peel", "Oatmeal", "Pork", "White Beans", "Lima Beans"
-                , "Liver", "Sausages", "Bean Threads", "Remoulade", "Ricotta Cheese", "Kidney Beans"
-                , "Fennel", "Pancetta", "Anchovies", "Bruschetta", "Basil", "Bard", "Allspice"
-                , "Cayenne Pepper", "Cooking Wine", "Cream of Tartar", "Cannellini Beans"
-                , "Plum Tomatoes", "Red Pepper Flakes", "Brown Rice", "Sunflower Seeds", "Veal"
-                , "Rhubarb", "Margarine", "Vanilla Bean", "Corn", "Potatoes", "Graham Crackers"
-                , "Dried Leeks", "Mayonnaise", "Zest", "Snow Peas", "Beans", "Poultry Seasoning"
-                , "Rice Paper", "Cauliflower", "Red Cabbage", "Irish Cream Liqueur", "Green Beans"
-                , "Beets", "Chard", "Chutney", "Aioli", "Custard", "Croutons", "Chaurice Sausage"
-                , "Bourbon", "Bananas", "Soymilk", "Brussels Sprouts", "Salmon", "Mozzarella"
-                , "Broccoli Raab", "Hash Browns", "Guavas", "Bok Choy", "Pig's Feet", "Mustard"
-                , "Fish Sauce", "Split Peas", "Barley", "Mascarpone", "Cheddar Cheese", "Dumpling"
-                , "Kiwi", "Melons", "Beer", "Plantains", "Steak", "Cappuccino Latte", "Canola Oil"
-                , "Bacon", "Coconut Oil", "Bean Sprouts", "Oranges", "Bay Leaves", "Sesame Seeds"
-                , "Water Chestnuts", "Cucumbers", "Parsnips", "Snap Peas", "Dill", "Blueberries"
-                , "Lentils", "Andouille Sausage", "Tomato Sauce", "Cod", "Flour", "Cornstarch"
-                , "Pecans", "Acorn Squash", "Venison", "Grapes"
+                "Heavy Cream", "Pumpkin Purée", "Arrabbiata Sauce", "Chicken", "Tomato Basil Sauce"
+                , "Ricotta Cheese", "Cream Cheese", "Zucchini", "Basil Pesto", "Marinara Sauce"
+                , "Mozzarella Cheese", "Italian Salad Dressing", "Mixed Vegetables", "Avocado"
+                , "Spinach", "Beef Ground", "Cheddar Cheese"
         };
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, INGREDIENTS);
         final AutoCompleteTextView textView = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
         textView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedIngredient = (String) adapterView.getItemAtPosition(i);
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                final String selectedIngredient = (String) adapterView.getItemAtPosition(i);
                 if (!selectedIngredients.contains(selectedIngredient)) {
                     //addIngredient(selectedIngredient);
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     String uid = user.getUid();
-                    DatabaseReference myRef = database.getReference("User");
+                    final DatabaseReference myRef = database.getReference("User");
                     myRef.child(uid).child("User Ingredients").child(selectedIngredient).setValue(selectedIngredient);
+                    final DatabaseReference newRef = database.getReference("Recipes");
+
+                    newRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                if (snapshot.child(selectedIngredient).exists()) {
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    FirebaseDatabase dbRecipes = FirebaseDatabase.getInstance();
+                                    String uid = user.getUid();
+                                    DatabaseReference Ref2 = dbRecipes.getReference("User");
+                                    Ref2.child(uid).child("Potential Recipes").child("Recipe " + snapshot.getKey()).setValue(snapshot.getKey());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     Toast.makeText(MainActivity.this, "Item added",
                             Toast.LENGTH_SHORT).show();
                     textView.setText(null);
