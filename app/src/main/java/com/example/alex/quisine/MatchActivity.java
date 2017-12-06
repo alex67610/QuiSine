@@ -37,7 +37,7 @@ import static com.example.alex.quisine.R.id.uploadCancel;
 
 public class MatchActivity extends Activity {
 
-    private Button buttonNext, buttonCancel;
+    private Button buttonLike, buttonDislike;
     private ImageButton imageButtonLike, imageButtonDislike;
     private TextView textViewTest;
     private ImageView imageViewTest;
@@ -47,13 +47,10 @@ public class MatchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
 
-        imageButtonLike = findViewById(R.id.imageButtonLike);
-        imageButtonDislike = findViewById(R.id.imageButtonDislike);
+        buttonLike = findViewById(R.id.buttonLike);
+        buttonDislike = findViewById(R.id.buttonDislike);
         textViewTest = findViewById(R.id.textViewTest);
         imageViewTest = findViewById(R.id.imageViewTest);
-
-        //buttonNext.setOnClickListener(this);
-        //buttonCancel.setOnClickListener(this);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String uid = user.getUid();
@@ -86,7 +83,7 @@ public class MatchActivity extends Activity {
                     });
                 }
 
-                imageButtonLike.setOnClickListener(new View.OnClickListener() {
+                buttonLike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (!list.isEmpty()) {
@@ -101,7 +98,7 @@ public class MatchActivity extends Activity {
                     }
                 });
 
-                imageButtonDislike.setOnClickListener(new View.OnClickListener() {
+                buttonDislike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (!list.isEmpty()) {
