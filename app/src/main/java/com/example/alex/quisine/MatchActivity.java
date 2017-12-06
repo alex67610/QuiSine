@@ -81,6 +81,9 @@ public class MatchActivity extends Activity {
                             imageViewTest.setImageBitmap(bitmap);
                         }
                     });
+                } else if (list.isEmpty()) {
+                    textViewTest.setText(null);
+                    imageViewTest.setImageBitmap(null);
                 }
 
                 buttonLike.setOnClickListener(new View.OnClickListener() {

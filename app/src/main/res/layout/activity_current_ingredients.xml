@@ -1,9 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.alex.quisine.CurrentIngredients">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        tools:context="com.example.alex.quisine.MainActivity">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_gravity="center"
+            android:contentDescription=""
+            android:src="@drawable/food"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textViewIngredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:text="Enter ingredients you want to delete:"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <AutoCompleteTextView
+            android:id="@+id/search_bar3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/colorRed"
+            android:textSize="18sp"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/textViewIngredientList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="40dp"
+            android:text="See below the list of ingredients you have:"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textViewList"
+            android:layout_width="298dp"
+            android:layout_height="157dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.05"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="164dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="45dp"
+            android:background="@color/colorRed"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Return Home Page"
+            android:textColor="@color/colorBottomNavigationActiveColored"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
