@@ -158,15 +158,17 @@ public class SettingsActivity extends Activity implements Button.OnClickListener
 
 // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.Home, R.drawable.ic_home_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Recipe, R.drawable.ic_local_dining_black_24dp, R.color.colorRed);
 
 // Add items
         bottomNavigation.addItem(item0);
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
+        bottomNavigation.addItem(item4);
 
 // Set background color
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
@@ -199,7 +201,7 @@ public class SettingsActivity extends Activity implements Button.OnClickListener
         bottomNavigation.setColored(true);
 
 // Set current item programmatically
-        bottomNavigation.setCurrentItem(3);
+        bottomNavigation.setCurrentItem(4);
 
 // Customize notification (title, background, typeface)
         bottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
@@ -218,9 +220,12 @@ public class SettingsActivity extends Activity implements Button.OnClickListener
                 } else if (position == 0) {
                     Intent intentMain = new Intent(SettingsActivity.this, MainActivity.class);
                     startActivity(intentMain);
-                } else if (position == 2) {
+                } else if (position == 3) {
                     Intent intentChat = new Intent(SettingsActivity.this, DiscussionReviewActivity.class);
                     startActivity(intentChat);
+                } else if (position == 2) {
+                    Intent intentMatch2 = new Intent(SettingsActivity.this, MatchActivity2.class);
+                    startActivity(intentMatch2);
                 }
                 return true;
             }

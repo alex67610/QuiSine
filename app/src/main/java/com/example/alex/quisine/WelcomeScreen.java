@@ -94,6 +94,7 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
                             myRef.child(uid).child("User Info").child("Age").setValue("Age");
                             myRef.child(uid).child("User Info").child("Address").setValue("Your address");
                             myRef.child(uid).child("User Info").child("Biography").setValue("Tell us about yourself");
+                            myRef.child(uid).child("User Preferences").child("Distance").setValue("0");
                         } else {
                             Toast.makeText(WelcomeScreen.this, "Account creation failed",
                                     Toast.LENGTH_SHORT).show();
@@ -123,11 +124,29 @@ public class WelcomeScreen extends Activity implements Button.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view.getId()==R.id.buttonRegister) {
-            createAccount(editTextUsername.getText().toString(),editTextPassword.getText().toString());
+            if (isEmpty(editTextUsername) || isEmpty(editTextPassword)) {
+                Toast.makeText(WelcomeScreen.this, "Username or Password empty",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                createAccount(editTextUsername.getText().toString(), editTextPassword.getText().toString());
+            }
         } else if (view.getId()==R.id.buttonLogin) {
-            signIn(editTextUsername.getText().toString(),editTextPassword.getText().toString());
-            //Intent intentLogin = new Intent(WelcomeScreen.this, MainActivity.class);
-            //startActivity(intentLogin);
+            if (isEmpty(editTextUsername) || isEmpty(editTextPassword)) {
+                Toast.makeText(WelcomeScreen.this, "Username or Password empty",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                signIn(editTextUsername.getText().toString(), editTextPassword.getText().toString());
+                //Intent intentLogin = new Intent(WelcomeScreen.this, MainActivity.class);
+                //startActivity(intentLogin);
+            }
         }
+    }
+
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -9,7 +9,9 @@ import android.graphics.Color;
 import android.media.Image;
 import android.media.audiofx.BassBoost;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static android.R.attr.data;
 import static android.R.attr.name;
 import static android.R.attr.progress;
 
@@ -42,13 +45,14 @@ public class MainActivity extends Activity implements Button.OnClickListener {
     private SeekBar mSeekbar;
     private TextView SeekBarValue;
     private Button buttonCheckIngredients;
+    private ValueEventListener mListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         mSeekbar = (SeekBar) findViewById(R.id.seekbar);
@@ -56,6 +60,71 @@ public class MainActivity extends Activity implements Button.OnClickListener {
         buttonCheckIngredients = (Button) findViewById(R.id.buttonCheckIngredients);
 
         buttonCheckIngredients.setOnClickListener(this);
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        final String uid = user.getUid();
+        DatabaseReference myReff =  db.getReference("User").child(uid).child("User Preferences");
+
+        myReff.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                SeekBarValue.setText(dataSnapshot.child("Distance").getValue().toString()+" mi.");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        final DatabaseReference myRef = db.getReference("User");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (!ds.getKey().matches(uid)) {
+                            final String userKey = ds.getKey();
+                            myRef.child(userKey).child("User Recipes").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds1 : dataSnapshot.getChildren()) {
+                                        final String recipe = ds1.getValue(String.class);
+                                        myRef.child(uid).child("User Recipes").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot ds2 : dataSnapshot.getChildren()) {
+                                                    final String myRecipe = ds2.getValue(String.class);
+                                                    if (recipe.matches(myRecipe)) {
+                                                        final String Key = userKey + " " + recipe;
+                                                        myRef.child(uid).child("Potential Match").child(Key).child("Recipe").setValue(recipe);
+                                                        myRef.child(uid).child("Potential Match").child(Key).child("UserKey").setValue(userKey);
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+        });
 
         mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -179,15 +248,17 @@ public class MainActivity extends Activity implements Button.OnClickListener {
 
 // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.Home, R.drawable.ic_home_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Recipe, R.drawable.ic_local_dining_black_24dp, R.color.colorRed);
 
 // Add items
         bottomNavigation.addItem(item0);
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
+        bottomNavigation.addItem(item4);
 
 // Set background color
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
@@ -233,15 +304,20 @@ public class MainActivity extends Activity implements Button.OnClickListener {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
                 // Do something cool here...
-                if (position == 3) {
+                if (position == 4) {
                     Intent intentSettings = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(intentSettings);
                 } else if (position == 1) {
                     Intent intentMatch = new Intent(MainActivity.this, MatchActivity.class);
                     startActivity(intentMatch);
-                } else if (position == 2) {
+                } else if (position == 3) {
                     Intent intentChat = new Intent(MainActivity.this, DiscussionReviewActivity.class);
                     startActivity(intentChat);
+                } else if (position == 2) {
+                    Intent intentMatch2 = new Intent(MainActivity.this, MatchActivity2.class);
+                    intentMatch2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intentMatch2);
+
                 }
                 return true;
             }
@@ -255,4 +331,5 @@ public class MainActivity extends Activity implements Button.OnClickListener {
             startActivity(intentIngredients);
         }
     }
+
 }

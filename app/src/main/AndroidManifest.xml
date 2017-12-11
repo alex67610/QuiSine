@@ -26,7 +26,8 @@
         <activity android:name=".UserIngredients" />
         <activity android:name=".CurrentIngredients" />
         <activity android:name=".UpdateProfile" />
-        <activity android:name=".UploadProfilePicture"></activity>
+        <activity android:name=".UploadProfilePicture" />
+        <activity android:name=".MatchActivity2"></activity>
     </application>
 
 </manifest>

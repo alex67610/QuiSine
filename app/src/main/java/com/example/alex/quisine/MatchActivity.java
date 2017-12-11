@@ -38,7 +38,6 @@ import static com.example.alex.quisine.R.id.uploadCancel;
 public class MatchActivity extends Activity {
 
     private Button buttonLike, buttonDislike;
-    private ImageButton imageButtonLike, imageButtonDislike;
     private TextView textViewTest;
     private ImageView imageViewTest;
 
@@ -56,9 +55,11 @@ public class MatchActivity extends Activity {
         final String uid = user.getUid();
 
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = db.getReference().child("User").child(uid).child("Potential Recipes");
+        final DatabaseReference myReft = db.getReference().child("User").child(uid).child("Potential Recipes");
+        final DatabaseReference myRef = db.getReference().child("User");
+        final DatabaseReference myRef2 = myRef.child(uid).child("User Recipes");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myReft.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final List<String> list = new ArrayList<String>();
@@ -90,9 +91,59 @@ public class MatchActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         if (!list.isEmpty()) {
-                            myRef.child("Recipe " + list.get(0)).removeValue();
-                            DatabaseReference myRef2 = db.getReference().child("User").child(uid).child("User Recipes");
-                            myRef2.child("Recipe " + list.get(0)).setValue(list.get(0));
+                            myReft.child("Recipe " + list.get(0)).removeValue();
+                            DatabaseReference myRef2t = db.getReference().child("User").child(uid).child("User Recipes");
+                            myRef2t.child("Recipe " + list.get(0)).setValue(list.get(0));
+                            Toast.makeText(MatchActivity.this, "You liked it!", Toast.LENGTH_SHORT).show();
+
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (final DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        if (!ds.getKey().toString().matches(uid)) {
+                                            final String userKey = ds.getKey().toString();
+                                            myRef.child(userKey).child("User Recipes").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    for (DataSnapshot ds1 : dataSnapshot.getChildren()) {
+                                                        final String recipe = ds1.getValue(String.class);
+                                                        myRef2.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                for (DataSnapshot ds2 : dataSnapshot.getChildren()) {
+                                                                    String myRecipe = ds2.getValue(String.class);
+                                                                    if (recipe.matches(myRecipe)) {
+                                                                        myRef.child(uid).child("Potential Match").child(userKey + " " + recipe).child("Recipe").setValue(recipe);
+                                                                        myRef.child(uid).child("Potential Match").child(userKey + " " + recipe).child("UserKey").setValue(userKey);
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
                         } else {
                             Toast.makeText(MatchActivity.this, "No other potential recipe",
                                     Toast.LENGTH_SHORT).show();
@@ -105,7 +156,8 @@ public class MatchActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         if (!list.isEmpty()) {
-                            myRef.child("Recipe " + list.get(0)).removeValue();
+                            myReft.child("Recipe " + list.get(0)).removeValue();
+                            Toast.makeText(MatchActivity.this, "Sorry to hear that..", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(MatchActivity.this, "No other potential recipe",
                                     Toast.LENGTH_SHORT).show();
@@ -114,6 +166,8 @@ public class MatchActivity extends Activity {
                         }
                     }
                 });
+
+
             }
 
             @Override
@@ -130,15 +184,17 @@ public class MatchActivity extends Activity {
 
 // Create items
         AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.Home, R.drawable.ic_home_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.Settings, R.drawable.ic_settings_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.Match, R.drawable.ic_group_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.Discussion, R.drawable.ic_chat_black_24dp, R.color.colorRed);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.Recipe, R.drawable.ic_local_dining_black_24dp, R.color.colorRed);
 
 // Add items
         bottomNavigation.addItem(item0);
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
+        bottomNavigation.addItem(item4);
 
 // Set background color
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
@@ -184,15 +240,18 @@ public class MatchActivity extends Activity {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
                 // Do something cool here...
-                if (position == 3) {
+                if (position == 4) {
                     Intent intentSettings = new Intent(MatchActivity.this, SettingsActivity.class);
                     startActivity(intentSettings);
                 } else if (position == 0) {
                     Intent intentMain = new Intent(MatchActivity.this, MainActivity.class);
                     startActivity(intentMain);
-                } else if (position == 2) {
+                } else if (position == 3) {
                     Intent intentChat = new Intent(MatchActivity.this, DiscussionReviewActivity.class);
                     startActivity(intentChat);
+                } else if (position == 2) {
+                    Intent intentMatch2 = new Intent(MatchActivity.this, MatchActivity2.class);
+                    startActivity(intentMatch2);
                 }
                 return true;
             }
